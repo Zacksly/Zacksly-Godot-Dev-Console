@@ -1,9 +1,9 @@
 #       _____           _        _             |                                |                                                                               |
-#      |__  / ___   ___| | _ ___| |_   _       |-------[File Information]-------|----[Links]------------------------------------------------------------------- | 
-#        / / / _ `|/ __| |/ / __| | | | |      |   [DevConsole: Version 1.0]    |       Youtube: https://www.youtube.com/channel/UC6eIKGkSNxBwa0NyZn_ow0A       |                        //
-#       / /_| (_| | (__|   <\__ \ | |_| |      |   [License: MIT]               |       Twitter: https://twitter.com/_Zacksly                                   |       //
+#      |__  / ___   ___| | _ ___| |_   _       |-------[File Information]-------|----[Links]------------------------------------------------------------------- |
+#        / / / _ `|/ __| |/ / __| | | | |      |   [DevConsole: Version 1.0]    |       Youtube: https://www.youtube.com/channel/UC6eIKGkSNxBwa0NyZn_ow0A       |              
+#       / /_| (_| | (__|   <\__ \ | |_| |      |   [License: MIT]               |       Twitter: https://twitter.com/_Zacksly                                   |
 #      /_____\__,_|\___|_|\_\___/_|\__, |      |                                |       Github: https://github.com/Zacksly                                      |
-#      - https://github.com/Zacksly |__/       |                                |       Itch: https://itch.io/profile/zacksly                                   |                          //
+#      - https://github.com/Zacksly |__/       |                                |       Itch: https://itch.io/profile/zacksly                                   |
 #===============================================================================================================================================================|
 
 class_name DevConsoleUI
@@ -53,9 +53,12 @@ func recenter_logo():
 	logo.position.y = dev_panel.rect_position.y * .5
 
 func _input(inputEvent):
-
+	if DevConsole.console_disabled:
+		return
+		
 	#If key is pressed and it is not a repeated input
 	if inputEvent is InputEventKey:
+		
 		# [Enter] : Run Command
 		if inputEvent.scancode == DevConsoleSettings.ENTER_KEY and !inputEvent.echo and inputEvent.pressed:
 			send_command()
@@ -96,6 +99,9 @@ func send_command():
 	pass
 
 func update_log(new_log):
+	
+	if DevConsole.console_disabled:
+		return
 		
 	if new_log == null:
 		log_text_area.bbcode_text = "";

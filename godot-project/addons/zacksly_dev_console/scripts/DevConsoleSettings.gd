@@ -1,5 +1,17 @@
-extends Node
+#       _____           _        _             |                                |                                                                               |
+#      |__  / ___   ___| | _ ___| |_   _       |-------[File Information]-------|----[Links]------------------------------------------------------------------- |
+#        / / / _ `|/ __| |/ / __| | | | |      |   [DevConsole: Version 1.0]    |       Youtube: https://www.youtube.com/channel/UC6eIKGkSNxBwa0NyZn_ow0A       |              
+#       / /_| (_| | (__|   <\__ \ | |_| |      |   [License: MIT]               |       Twitter: https://twitter.com/_Zacksly                                   |
+#      /_____\__,_|\___|_|\_\___/_|\__, |      |                                |       Github: https://github.com/Zacksly                                      |
+#      - https://github.com/Zacksly |__/       |                                |       Itch: https://itch.io/profile/zacksly                                   |
+#===============================================================================================================================================================|
 class_name DevConsoleSettings
+
+# Disable use of DevConsole once game has been exported | Default = false
+const ENABLED_ON_RELEASE_EXPORT = false
+
+# Enable use of DevConsole if game has been exported with debug enabled | Default = true
+const ENABLED_ON_DEBUG_EXPORT = true
 
 # Which theme to use. Themes are located in the /zacksly_dev_console/themes folder | Default = dark_theme.tres
 const THEME = "hax_theme.tres"

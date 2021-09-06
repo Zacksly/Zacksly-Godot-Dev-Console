@@ -1,9 +1,9 @@
 #       _____           _        _             |                                |                                                                               |
-#      |__  / ___   ___| | _ ___| |_   _       |-------[File Information]-------|----[Links]------------------------------------------------------------------- | 
-#        / / / _ `|/ __| |/ / __| | | | |      |   [DevConsole: Version 1.0]    |       Youtube: https://www.youtube.com/channel/UC6eIKGkSNxBwa0NyZn_ow0A       |                        //
-#       / /_| (_| | (__|   <\__ \ | |_| |      |   [License: MIT]               |       Twitter: https://twitter.com/_Zacksly                                   |       //
+#      |__  / ___   ___| | _ ___| |_   _       |-------[File Information]-------|----[Links]------------------------------------------------------------------- |
+#        / / / _ `|/ __| |/ / __| | | | |      |   [DevConsole: Version 1.0]    |       Youtube: https://www.youtube.com/channel/UC6eIKGkSNxBwa0NyZn_ow0A       |              
+#       / /_| (_| | (__|   <\__ \ | |_| |      |   [License: MIT]               |       Twitter: https://twitter.com/_Zacksly                                   |
 #      /_____\__,_|\___|_|\_\___/_|\__, |      |                                |       Github: https://github.com/Zacksly                                      |
-#      - https://github.com/Zacksly |__/       |                                |       Itch: https://itch.io/profile/zacksly                                   |                          //
+#      - https://github.com/Zacksly |__/       |                                |       Itch: https://itch.io/profile/zacksly                                   |
 #===============================================================================================================================================================|
 
 extends Node
@@ -25,8 +25,18 @@ var command_help_texts = [];
 
 # Bool that is set when console is opened for the first time
 var dev_mode_enabled = false
+var console_disabled = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	# If DISABLE_ON_RELEASE_EXPORT enabled and app is exported don't show console and bypass command calls
+	if !DevConsoleSettings.ENABLED_ON_RELEASE_EXPORT && !OS.is_debug_build() && OS.has_feature("standalone"):
+		console_disabled = true
+		
+	# If ENABLE_ON_DEBUG_EXPORT disabled and app is exported don't show console and bypass command calls
+	if !DevConsoleSettings.ENABLED_ON_DEBUG_EXPORT && OS.is_debug_build() && OS.has_feature("standalone"):
+		console_disabled = true
+		
 	launch_console()
 	
 func launch_console():
@@ -35,6 +45,7 @@ func launch_console():
 	dev_console_ui = console
 
 	commands = get_commands(command_path)
+	
 	pass # Replace with function body.
 
 func _process(delta):	
