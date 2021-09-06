@@ -1,9 +1,9 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://DevConsole/Themes/DarkTheme.tres" type="Theme" id=1]
-[ext_resource path="res://DevConsole/Scripts/DevConsoleUI.cs" type="Script" id=2]
-[ext_resource path="res://DevConsole/Fonts/JetBrainsMono.tres" type="DynamicFont" id=4]
-[ext_resource path="res://DevConsole/UI/Zacksly DevConsole Logo.png" type="Texture" id=5]
+[ext_resource path="res://addons/zacksly_dev_console/themes/dark_theme.tres" type="Theme" id=1]
+[ext_resource path="res://addons/zacksly_dev_console/fonts/JetBrainsMono.tres" type="DynamicFont" id=2]
+[ext_resource path="res://addons/zacksly_dev_console/scripts/DevConsoleUI.gd" type="Script" id=3]
+[ext_resource path="res://addons/zacksly_dev_console/ui/Zacksly DevConsole Logo.png" type="Texture" id=4]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.145098, 0.145098, 0.14902, 1 )
@@ -1051,7 +1051,7 @@ WindowDialog/icons/close_highlight = null
 WindowDialog/styles/panel = null
 
 [sub_resource type="Theme" id=4]
-default_font = ExtResource( 4 )
+default_font = ExtResource( 2 )
 Button/colors/font_color = Color( 0, 0, 0, 1 )
 Button/colors/font_color_disabled = Color( 0, 0, 0, 1 )
 Button/colors/font_color_hover = Color( 0, 0, 0, 1 )
@@ -1468,24 +1468,26 @@ WindowDialog/icons/close = null
 WindowDialog/icons/close_highlight = null
 WindowDialog/styles/panel = null
 
-[node name="DevConsole" type="MarginContainer"]
+[node name="CanvasLayer" type="CanvasLayer"]
+layer = 128
+script = ExtResource( 3 )
+
+[node name="DevConsole" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 3 )
-script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-LogHistoryLength = 100
 
-[node name="MainContainer" type="VBoxContainer" parent="."]
+[node name="MainContainer" type="VBoxContainer" parent="DevConsole"]
 margin_right = 1024.0
 margin_bottom = 600.0
 mouse_filter = 0
 
-[node name="Transparent Area" type="ColorRect" parent="MainContainer"]
+[node name="Transparent Area" type="ColorRect" parent="DevConsole/MainContainer"]
 margin_right = 1024.0
 margin_bottom = 298.0
 mouse_filter = 2
@@ -1493,7 +1495,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 0.823529, 0.537255, 0.537255, 0 )
 
-[node name="DevPanel" type="Panel" parent="MainContainer"]
+[node name="DevPanel" type="Panel" parent="DevConsole/MainContainer"]
 margin_top = 302.0
 margin_right = 1024.0
 margin_bottom = 600.0
@@ -1501,16 +1503,16 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 4 )
 
-[node name="Zacksly DevConsole Logo" type="Sprite" parent="MainContainer/DevPanel"]
+[node name="ZackslyDevConsoleLogo" type="Sprite" parent="DevConsole/MainContainer/DevPanel"]
 modulate = Color( 1, 1, 1, 0.0313726 )
 position = Vector2( 516.742, 141.662 )
 scale = Vector2( 0.276949, 0.276949 )
-texture = ExtResource( 5 )
+texture = ExtResource( 4 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="LineBackground2" type="ColorRect" parent="MainContainer/DevPanel"]
+[node name="LineBackground2" type="ColorRect" parent="DevConsole/MainContainer/DevPanel"]
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -1520,7 +1522,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CommandInput" type="LineEdit" parent="MainContainer/DevPanel"]
+[node name="CommandInput" type="LineEdit" parent="DevConsole/MainContainer/DevPanel"]
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -1536,7 +1538,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/DevPanel"]
+[node name="ScrollContainer" type="ScrollContainer" parent="DevConsole/MainContainer/DevPanel"]
 process_priority = 1
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -1549,13 +1551,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Log" type="RichTextLabel" parent="MainContainer/DevPanel/ScrollContainer"]
+[node name="Log" type="RichTextLabel" parent="DevConsole/MainContainer/DevPanel/ScrollContainer"]
 margin_right = 1014.0
 margin_bottom = 265.0
 focus_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource( 1 )
 bbcode_enabled = true
 selection_enabled = true
-[connection signal="meta_clicked" from="MainContainer/DevPanel/ScrollContainer/Log" to="." method="_on_Log_meta_clicked"]
+
+[connection signal="meta_clicked" from="DevConsole/MainContainer/DevPanel/ScrollContainer/Log" to="DevConsole" method="_on_Log_meta_clicked"]

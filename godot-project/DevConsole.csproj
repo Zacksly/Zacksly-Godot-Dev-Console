@@ -53,12 +53,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DevConsole\Scripts\Commands\PrintCommand.cs" />
-    <Compile Include="DevConsole\Scripts\Commands\ScreenshotCommand.cs" />
-    <Compile Include="DevConsole\Scripts\Commands\ShowFPSCommand.cs" />
-    <Compile Include="DevConsole\Scripts\ConsoleCommand.cs" />
-    <Compile Include="DevConsole\Scripts\DevConsole.cs" />
-    <Compile Include="DevConsole\Scripts\DevConsoleUI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

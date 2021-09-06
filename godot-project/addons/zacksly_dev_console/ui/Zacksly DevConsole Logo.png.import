@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Zacksly DevConsole Logo.png-06df0fa8ecec60e9a73529a974129a47.stex"
+path="res://.import/Zacksly DevConsole Logo.png-fad20ed359c829efbbd17b0ae5a514fa.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://DevConsole/UI/Zacksly DevConsole Logo.png"
-dest_files=[ "res://.import/Zacksly DevConsole Logo.png-06df0fa8ecec60e9a73529a974129a47.stex" ]
+source_file="res://addons/zacksly_dev_console/ui/Zacksly DevConsole Logo.png"
+dest_files=[ "res://.import/Zacksly DevConsole Logo.png-fad20ed359c829efbbd17b0ae5a514fa.stex" ]
 
 [params]
 

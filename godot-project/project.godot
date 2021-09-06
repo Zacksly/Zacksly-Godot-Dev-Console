@@ -8,16 +8,37 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Node",
+"class": "ConsoleCommand",
+"language": "GDScript",
+"path": "res://addons/zacksly_dev_console/scripts/ConsoleCommand.gd"
+}, {
+"base": "Node",
+"class": "DevConsoleSettings",
+"language": "GDScript",
+"path": "res://addons/zacksly_dev_console/scripts/DevConsoleSettings.gd"
+}, {
+"base": "Node",
+"class": "DevConsoleUI",
+"language": "GDScript",
+"path": "res://addons/zacksly_dev_console/scripts/DevConsoleUI.gd"
+} ]
 _global_script_class_icons={
-
+"ConsoleCommand": "",
+"DevConsoleSettings": "",
+"DevConsoleUI": ""
 }
 
 [application]
 
 config/name="DevConsole"
-run/main_scene="res://DevConsole/UI/DevConsole.tscn"
+run/main_scene="res://TestScene.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+DevConsole="*res://addons/zacksly_dev_console/scripts/autoloads/DevConsole.gd"
 
 [rendering]
 
