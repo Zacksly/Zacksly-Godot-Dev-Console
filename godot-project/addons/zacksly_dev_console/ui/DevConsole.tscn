@@ -1560,4 +1560,4 @@ size_flags_vertical = 3
 bbcode_enabled = true
 selection_enabled = true
 
-[connection signal="meta_clicked" from="DevConsole/MainContainer/DevPanel/ScrollContainer/Log" to="DevConsole" method="_on_Log_meta_clicked"]
+[connection signal="meta_clicked" from="DevConsole/MainContainer/DevPanel/ScrollContainer/Log" to="." method="_on_Log_meta_clicked"]

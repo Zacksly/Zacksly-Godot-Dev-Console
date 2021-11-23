@@ -2,10 +2,9 @@ extends ConsoleCommand
 
 var help_text = "Open a directory on pc (type list for a list of built-in directories)"
 
-const directories = ["user", "exec_path", "desktop", "dcim", "documents", "movies", "music", "pictures"]
+const directories = ["user", "exec_path", "desktop", "dcim", "documents", "movies", "music", "pictures", "screenshots"]
 
 func command(args):
-	print("opening dir")
 	match args[0]:
 		"list":
 			DevConsole.log_success("Built-in directories:")
@@ -29,5 +28,7 @@ func command(args):
 			OS.shell_open(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC))
 		"pictures":
 			OS.shell_open(OS.get_system_dir(OS.SYSTEM_DIR_PICTURES))
+		"screenshots":
+			OS.shell_open(OS.get_user_data_dir() +"/screenshots")
 		_:
 			OS.shell_open(str("file://", args[0]))

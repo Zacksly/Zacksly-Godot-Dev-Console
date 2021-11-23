@@ -1,12 +1,13 @@
 #       _____           _        _             |                                |                                                                               |
 #      |__  / ___   ___| | _ ___| |_   _       |-------[File Information]-------|----[Links]------------------------------------------------------------------- |
-#        / / / _ `|/ __| |/ / __| | | | |      |   [DevConsole: Version 1.0]    |       Youtube: https://www.youtube.com/channel/UC6eIKGkSNxBwa0NyZn_ow0A       |              
+#        / / / _ `|/ __| |/ / __| | | | |      |   [DevConsole: Version 1.0]    |       Website: https://zacksly.com                                            | 
 #       / /_| (_| | (__|   <\__ \ | |_| |      |   [License: MIT]               |       Twitter: https://twitter.com/_Zacksly                                   |
-#      /_____\__,_|\___|_|\_\___/_|\__, |      |                                |       Github: https://github.com/Zacksly                                      |
-#      - https://github.com/Zacksly |__/       |                                |       Itch: https://itch.io/profile/zacksly                                   |
-#===============================================================================================================================================================|
+#      /_____\__,_|\___|_|\_\___/_|\__, |      |                                |       Itch: https://itch.io/profile/zacksly                                   |
+#      - https://github.com/Zacksly |__/       |                                |       Youtube: https://www.youtube.com/channel/UC6eIKGkSNxBwa0NyZn_ow0A       |
+#===============================================================================================================================================================
+class_name DevConsoleUI  # /
+#=========================/
 
-class_name DevConsoleUI
 extends Node
 
 var zackslyConsoleInfo = ["","[center]Zacksly DevConsole", "Version 1.0 Beta", "[color=#2ec057]https://github.com/Zacksly[/color][/center]"]
@@ -16,9 +17,12 @@ var dev_console_path = DevConsoleSettings.DEVCONSOLE_PATH
 var theme_name = DevConsoleSettings.THEME
 
 var log_history_length = DevConsoleSettings.LOG_HISTORY_LENGTH
+var command_history_length = DevConsoleSettings.COMMAND_HISTORY_LENGTH
 var dev_console
 
-onready var view_container = $DevConsole/MainContainer  #Container for console view, should be a child of this GameObject
+var current_history_index = 0
+
+onready var view_container = $DevConsole  #Container for console view, should be a child of this GameObject
 onready var log_text_area: RichTextLabel = $DevConsole/MainContainer/DevPanel/ScrollContainer/Log
 onready var command_input: LineEdit = $DevConsole/MainContainer/DevPanel/CommandInput
 onready var dev_panel := $DevConsole/MainContainer/DevPanel
@@ -26,6 +30,7 @@ onready var scroll_container: ScrollContainer = $DevConsole/MainContainer/DevPan
 onready var logo := $DevConsole/MainContainer/DevPanel/ZackslyDevConsoleLogo
 
 func _ready():
+	pause_mode = Node.PAUSE_MODE_PROCESS
 	get_tree().get_root().connect("size_changed", self, "recenter_logo")
 	
 	if get_tree().current_scene != self:
@@ -59,10 +64,6 @@ func _input(inputEvent):
 	#If key is pressed and it is not a repeated input
 	if inputEvent is InputEventKey:
 		
-		# [Enter] : Run Command
-		if inputEvent.scancode == DevConsoleSettings.ENTER_KEY and !inputEvent.echo and inputEvent.pressed:
-			send_command()
-			
 		# Default [`] : Show/hide the console
 		if inputEvent.scancode == DevConsoleSettings.OPEN_KEY and !inputEvent.echo and !inputEvent.pressed:
 			if DevConsole.open_pressed_count < DevConsole.unlock_count:
@@ -73,20 +74,52 @@ func _input(inputEvent):
 					DevConsole.log_success("Developer mode enabled")
 			else:
 				toggle_visibility()
+		
+		if DevConsole.console_disabled || !view_container.visible:
+			return
+		
+		# Default [Enter] : Run Command
+		if inputEvent.scancode == DevConsoleSettings.ENTER_KEY and !inputEvent.echo and inputEvent.pressed:
+			send_command()
+		# Default [↑] : Move up in history
+		if inputEvent.scancode == DevConsoleSettings.HISTORY_FORWARD and !inputEvent.echo and !inputEvent.pressed:
+			history_forward()
+		# Default [↓] : Move up in history
+		if inputEvent.scancode == DevConsoleSettings.HISTORY_BACK and !inputEvent.echo and !inputEvent.pressed:
+			history_back()
+		
 	pass 
 
-
+func history_forward():
+	
+	if current_history_index < DevConsole.command_history.size()-1:
+		current_history_index += 1
+		command_input.text = DevConsole.command_history[current_history_index]
+		command_input.caret_position = command_input.text.length()
+	pass
+	
+func history_back():
+	
+	if current_history_index > 0:
+		current_history_index -= 1
+		command_input.text = DevConsole.command_history[current_history_index]
+		command_input.caret_position = command_input.text.length()
+	pass
+	
 func toggle_visibility(is_init = false):
+	recenter_logo()
 	view_container.visible = !view_container.visible		
-	#If we're now visible focus on the line text field
+	
+	# If we're now visible, focus on the line text field
 	if view_container.visible:
-
+		get_tree().paused = true
 		if DevConsoleSettings.UNLOCK_MOUSE && Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		
 		yield(get_tree(), "idle_frame")
 		command_input.grab_focus()
 	else:
+		get_tree().paused = false
 		if DevConsoleSettings.LOCK_MOUSE && Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE && !is_init:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 

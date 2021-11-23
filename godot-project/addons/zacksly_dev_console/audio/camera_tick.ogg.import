@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/camera_tick.ogg-2bc9cdaa17bd611fbc8137918bff398d.oggstr"
+
+[deps]
+
+source_file="res://addons/zacksly_dev_console/audio/camera_tick.ogg"
+dest_files=[ "res://.import/camera_tick.ogg-2bc9cdaa17bd611fbc8137918bff398d.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

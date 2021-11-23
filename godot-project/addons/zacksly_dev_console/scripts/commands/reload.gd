@@ -3,5 +3,7 @@ extends ConsoleCommand
 var help_text = "Reloads current scene"
 
 func command(args):
-	var current_scene = get_tree().get_current_scene().get_filename()
-	get_tree().change_scene(current_scene)
+	DevConsole.log_success("Reloading Current Scene...")
+	yield(get_tree().create_timer(.5), "timeout")
+	get_tree().paused = false
+	var current_scene = DevConsole.dev_console_ui.get_tree().reload_current_scene()

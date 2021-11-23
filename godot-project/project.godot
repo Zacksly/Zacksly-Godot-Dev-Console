@@ -23,11 +23,23 @@ _global_script_classes=[ {
 "class": "DevConsoleUI",
 "language": "GDScript",
 "path": "res://addons/zacksly_dev_console/scripts/DevConsoleUI.gd"
+}, {
+"base": "Camera",
+"class": "FreelookCamera_3D",
+"language": "GDScript",
+"path": "res://addons/zacksly_dev_console/scripts/command_utils/free_cam_3d.gd"
+}, {
+"base": "Camera2D",
+"class": "TouchCamera2D",
+"language": "GDScript",
+"path": "res://addons/zacksly_dev_console/scripts/command_utils/free_cam_2d.gd"
 } ]
 _global_script_class_icons={
 "ConsoleCommand": "",
 "DevConsoleSettings": "",
-"DevConsoleUI": ""
+"DevConsoleUI": "",
+"FreelookCamera_3D": "",
+"TouchCamera2D": ""
 }
 
 [application]

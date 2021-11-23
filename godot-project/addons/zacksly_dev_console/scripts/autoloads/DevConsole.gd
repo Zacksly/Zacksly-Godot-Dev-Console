@@ -1,22 +1,22 @@
 #       _____           _        _             |                                |                                                                               |
 #      |__  / ___   ___| | _ ___| |_   _       |-------[File Information]-------|----[Links]------------------------------------------------------------------- |
-#        / / / _ `|/ __| |/ / __| | | | |      |   [DevConsole: Version 1.0]    |       Youtube: https://www.youtube.com/channel/UC6eIKGkSNxBwa0NyZn_ow0A       |              
+#        / / / _ `|/ __| |/ / __| | | | |      |   [DevConsole: Version 1.0]    |       Website: https://zacksly.com                                            | 
 #       / /_| (_| | (__|   <\__ \ | |_| |      |   [License: MIT]               |       Twitter: https://twitter.com/_Zacksly                                   |
-#      /_____\__,_|\___|_|\_\___/_|\__, |      |                                |       Github: https://github.com/Zacksly                                      |
-#      - https://github.com/Zacksly |__/       |                                |       Itch: https://itch.io/profile/zacksly                                   |
-#===============================================================================================================================================================|
-
+#      /_____\__,_|\___|_|\_\___/_|\__, |      |                                |       Itch: https://itch.io/profile/zacksly                                   |
+#      - https://github.com/Zacksly |__/       |                                |       Youtube: https://www.youtube.com/channel/UC6eIKGkSNxBwa0NyZn_ow0A       |
+#===============================================================================================================================================================
 extends Node
 
 var dev_console_scene = preload("res://addons/zacksly_dev_console/ui/DevConsole.tscn")
 var command_path = "res://addons/zacksly_dev_console/scripts/commands/"
 
-# Get references to Node Hierarchy to make coding more convenient
+# Get references to node hierarchy to make command coding more convenient
 var current_scene: Node
 var root: Node
 
 var dev_console_ui;
-var commandHistory: Array = []
+var log_history: Array = []
+var command_history: Array = []
 var open_pressed_count = 0 # how many times [`] has been pressed
 var unlock_count = DevConsoleSettings.PRESS_TO_OPEN_AMOUNT # how many times [`] needs to be pressed before opening the console
 
@@ -53,9 +53,11 @@ func _process(delta):
 		launch_console()
 		
 		yield(get_tree(),"idle_frame")
-		dev_console_ui.update_log(commandHistory)	
+		dev_console_ui.update_log(log_history)	
 
 func run_command(command_string: String):
+	add_command_to_history(command_string)
+	
 	log_normal("$ " + command_string)
 	if command_string == "":
 		return
@@ -116,15 +118,15 @@ func log_normal(line: String, override_last = false):
 	if !is_instance_valid(dev_console_ui):
 		return
 		
-	if commandHistory.size() >= dev_console_ui.log_history_length:
-		commandHistory = commandHistory.slice(1,commandHistory.size(),1)
+	if log_history.size() >= dev_console_ui.log_history_length:
+		log_history = log_history.slice(1,log_history.size(),1)
 	
 	if !override_last:
-		commandHistory.append(line)
-		dev_console_ui.update_log(commandHistory)
+		log_history.append(line)
+		dev_console_ui.update_log(log_history)
 	else:
-		commandHistory[-1] = line
-		dev_console_ui.update_log(commandHistory)
+		log_history[-1] = line
+		dev_console_ui.update_log(log_history)
 	pass
 
 func log_color(text, color, override_last = false):
@@ -139,6 +141,17 @@ func log_success(text, override_last = false):
 func log_warning(text, override_last = false):
 	log_color(text, "#dcdcaa", override_last)
 
+func add_command_to_history(command_string: String): 
+	if !is_instance_valid(dev_console_ui):
+		return
+		
+	if command_history.size() >= dev_console_ui.command_history_length:
+		command_history = command_history.slice(1,command_history.size(),1)
+	
+	command_history.append(command_string)
+	dev_console_ui.current_history_index = command_history.size()
+	pass
+
 func help_command():
 	var directory = Directory.new();
 	for command_name in commands:
@@ -152,7 +165,7 @@ func help_command():
 			log_error("Command not found")
 			return
 			
-		var help_text = "No help info is listed for this command. Add a string var called 'help_text' in your command script to create one"
+		var help_text = "No help info is listed for this command. Add a string variable called 'help_text' in your command script to create one"
 		
 		if not command_instance.get("help_text") == null:
 			help_text = command_instance.help_text
@@ -185,9 +198,7 @@ func parse_command(command_text):
 	var waiting_for_quote = false;
 	
 	for i in range(0, command_text.length()):
-		
-		#print(command_text[i])
-		
+				
 		if(i == command_text.length()-1):
 			if waiting_for_quote and command_text[i] == '"' :
 				parsed_command.append(command_text.substr(last_index,i-last_index))
